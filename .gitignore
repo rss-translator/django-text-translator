@@ -1,0 +1,45 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pyi
+*.pyz
+*.pyw
+*.pyz/
+*.pyw/
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+media/
+
+# PyPI
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Setuptools
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Pip
+pip-wheel-metpipadata/
+
+# Virtualenv
+.venv/
+venv/
+ENV/
