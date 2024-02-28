@@ -34,7 +34,7 @@ Installation
 
     results = openai_translator.translate(text="Hello, world!",target_language="Chinese")
 
-    print(results.result) # 你好，世界！
+    print(results.text) # 你好，世界！
     print(results.tokens) # 51
 
     ```
