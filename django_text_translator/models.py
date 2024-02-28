@@ -18,19 +18,19 @@ class TranslatorEngine(models.Model):
     name = models.CharField(_("Name"), max_length=100, unique=True)
     valid = models.BooleanField(_("Valid"),null=True)
 
-    def translate(self, text: str, target_language) -> dict:
+    def translate(self, text: str, target_language: str) -> dict:
         raise NotImplementedError(
             "subclasses of TranslatorEngine must provide a translate() method"
         )
 
-    def min_size(self):
+    def min_size(self) -> int:
         if hasattr(self, "max_characters"):
             return self.max_characters * 0.7
         if hasattr(self, "max_tokens"):
             return self.max_tokens * 0.7
         return 0
 
-    def max_size(self):
+    def max_size(self) -> int:
         if hasattr(self, "max_characters"):
             return self.max_characters * 0.9
         if hasattr(self, "max_tokens"):
@@ -57,13 +57,13 @@ class TestTranslator(TranslatorEngine):
         verbose_name = "Test"
         verbose_name_plural = "Test"
 
-    def validate(self):
+    def validate(self) -> bool:
         return True
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Test Translate [%s]: %s", target_language, text)
         sleep(self.interval)
-        return {'result': f"{target_language} {self.translated_text} {text}", "tokens": 0, "characters": len(text)}
+        return {'text': f"{target_language} {self.translated_text} {text}", "tokens": 0, "characters": len(text)}
 
 class OpenAITranslator(TranslatorEngine):
     # https://platform.openai.com/docs/api-reference/chat
@@ -96,7 +96,7 @@ class OpenAITranslator(TranslatorEngine):
                     timeout=20.0,
                 )
 
-    def validate(self):
+    def validate(self) -> bool:
         if self.api_key:
             try:
                 client = self._init()
@@ -109,7 +109,7 @@ class OpenAITranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> OpenAI Translate [%s]:", target_language)
         client = self._init()
         tokens = 0
@@ -134,7 +134,7 @@ class OpenAITranslator(TranslatorEngine):
         except Exception as e:
             logging.error("OpenAITranslator->%s: %s", e, text)
 
-        return {'result': translated_text, "tokens": tokens}
+        return {'text': translated_text, "tokens": tokens}
 
 class AzureAITranslator(TranslatorEngine):
     # https://learn.microsoft.com/azure/ai-services/openai/
@@ -161,7 +161,7 @@ class AzureAITranslator(TranslatorEngine):
                     timeout=20.0,
                 )
 
-    def validate(self):
+    def validate(self) -> bool:
         if self.api_key:
             try:
                 client = self._init()
@@ -174,7 +174,7 @@ class AzureAITranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> AzureAI Translate [%s]:", target_language)
         client = self._init()
         tokens = 0
@@ -199,7 +199,7 @@ class AzureAITranslator(TranslatorEngine):
         except Exception as e:
             logging.error("AzureAITranslator->%s: %s", e, text)
 
-        return {'result': translated_text, "tokens": tokens}
+        return {'text': translated_text, "tokens": tokens}
 
 
 class DeepLTranslator(TranslatorEngine):
@@ -245,7 +245,7 @@ class DeepLTranslator(TranslatorEngine):
         except Exception as e:
             return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> DeepL Translate [%s]: %s", target_language, text)
         target_code = self.language_code_map.get(target_language, None)
         translated_text = ''
@@ -258,7 +258,7 @@ class DeepLTranslator(TranslatorEngine):
             translated_text = resp.text
         except Exception as e:
             logging.error("DeepLTranslator->%s: %s", e, text)
-        return {'result': translated_text, "characters": len(text)}
+        return {'text': translated_text, "characters": len(text)}
 
 
 class DeepLXTranslator(TranslatorEngine):
@@ -299,7 +299,7 @@ class DeepLXTranslator(TranslatorEngine):
         except Exception as e:
             return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> DeepLX Translate [%s]: %s", target_language, text)
         target_code = self.language_code_map.get(target_language, None)
         translated_text = ''
@@ -321,7 +321,7 @@ class DeepLXTranslator(TranslatorEngine):
             logging.error("DeepLXTranslator->%s: %s", e, text)
         finally:
             sleep(self.interval)
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
 
 
 class DeepLWebTranslator(TranslatorEngine):
@@ -362,7 +362,7 @@ class DeepLWebTranslator(TranslatorEngine):
         except Exception as e:
             return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> DeepL Web Translate [%s]: %s", target_language, text)
         target_code = self.language_code_map.get(target_language, None)
         translated_text = ''
@@ -376,7 +376,7 @@ class DeepLWebTranslator(TranslatorEngine):
             logging.error("DeepLWebTranslator->%s: %s", e, text)
         finally:
             sleep(self.interval)
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
 
 class MicrosoftTranslator(TranslatorEngine):
     # https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support
@@ -415,7 +415,7 @@ class MicrosoftTranslator(TranslatorEngine):
         result = self.translate("Hi", "Chinese Simplified")
         return result.get("result") != ""
 
-    def translate(self, text, target_language) -> dict:
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Microsoft Translate [%s]: %s", target_language, text)
         target_code = self.language_code_map.get(target_language, None)
         translated_text = ''
@@ -443,7 +443,7 @@ class MicrosoftTranslator(TranslatorEngine):
         except Exception as e:
             logging.error("MicrosoftTranslator->%s: %s", e, text)
         finally:
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
 
 
 class CaiYunTranslator(TranslatorEngine):
@@ -469,7 +469,7 @@ class CaiYunTranslator(TranslatorEngine):
         result = self.translate("Hi", "Chinese Simplified")
         return result.get("result") != ""
 
-    def translate(self, text: str, target_language) -> dict:
+    def translate(self, text: str, target_language: str) -> dict:
         logging.info(">>> CaiYun Translate [%s]: %s", target_language, text)
         target_code = self.language_code_map.get(target_language, None)
         translated_text = ''
@@ -495,7 +495,7 @@ class CaiYunTranslator(TranslatorEngine):
         except Exception as e:
             logging.error("CaiYunTranslator->%s: %s", e, text)
         finally:
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
 
 
 class GeminiTranslator(TranslatorEngine):
@@ -521,7 +521,7 @@ class GeminiTranslator(TranslatorEngine):
         genai.configure(api_key=self.api_key)
         return genai.GenerativeModel(self.model)
 
-    def validate(self):
+    def validate(self) -> bool:
         if self.api_key:
             try:
                 model = self._init()
@@ -530,7 +530,7 @@ class GeminiTranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Gemini Translate [%s]:", target_language)
         model = self._init()
         tokens = 0
@@ -557,7 +557,7 @@ class GeminiTranslator(TranslatorEngine):
         finally:
             sleep(self.interval)
 
-        return {'result': translated_text, "tokens": tokens}
+        return {'text': translated_text, "tokens": tokens}
 
 
 class ClaudeTranslator(TranslatorEngine):
@@ -585,7 +585,7 @@ class ClaudeTranslator(TranslatorEngine):
             proxies=self.proxy,
         )
 
-    def validate(self):
+    def validate(self) -> bool:
         if self.api_key:
             try:
                 res = self.translate("hi", "Chinese Simplified")
@@ -593,7 +593,7 @@ class ClaudeTranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Claude Translate [%s]:", target_language)
         client = self._init()
         tokens = client.count_tokens(text)
@@ -615,7 +615,7 @@ class ClaudeTranslator(TranslatorEngine):
         except Exception as e:
             logging.error("ClaudeTranslator->%s: %s", e, text)
         finally:
-            return {'result': translated_text, "tokens": tokens}
+            return {'text': translated_text, "tokens": tokens}
 
 
 class GoogleTranslateWebTranslator(TranslatorEngine):
@@ -650,17 +650,17 @@ class GoogleTranslateWebTranslator(TranslatorEngine):
         verbose_name = "Google Translate(Web)"
         verbose_name_plural = "Google Translate(Web)"
 
-    def validate(self):
+    def validate(self) -> bool:
         results = self.translate("hi", "Chinese Simplified")
         return results.get("result") != ""
 
-    def translate(self, text, target_language):
+    def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Google Translate Web Translate [%s]:", target_language)
         target_language = self.language_code_map.get(target_language)
         translated_text = ''
         if target_language is None:
             logging.error("GoogleTranslateWebTranslator->Not support target language:%s", target_language)
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
         try:
             params = {
                 "client": "gtx",
@@ -676,4 +676,4 @@ class GoogleTranslateWebTranslator(TranslatorEngine):
             logging.error("GoogleTranslateWebTranslator->%s: %s", e, text)
         finally:
             sleep(self.interval)
-            return {'result': translated_text, "characters": len(text)}
+            return {'text': translated_text, "characters": len(text)}
