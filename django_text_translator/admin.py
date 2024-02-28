@@ -95,13 +95,6 @@ class ClaudeTranslatorAdmin(BaseTranslatorAdmin):
 
 
 if settings.DEBUG:
-    @admin.register(Translated_Content)
-    class Translated_ContentAdmin(admin.ModelAdmin):
-        # not permission to change anythin
-        fields = ["original_content", "translated_content", "translated_language", "tokens", "characters"]
-        list_display = ["original_content", "translated_language", "translated_content", "tokens", "characters"]
-
-
     @admin.register(TestTranslator)
     class TestTranslatorAdmin(BaseTranslatorAdmin):
         fields = ["name", "translated_text", "max_characters", "interval"]
