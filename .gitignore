@@ -43,3 +43,5 @@ pip-wheel-metpipadata/
 .venv/
 venv/
 ENV/
+
+.idea/
