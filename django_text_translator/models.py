@@ -41,7 +41,7 @@ class Translated_Content(models.Model):
         except Translated_Content.DoesNotExist:
             logging.info("Does not exist in cache:%s", text)
             return None
-    
+
     def save(self, *args, **kwargs):
         if not self.hash:
             self.hash = cityhash.CityHash64(f"{self.original_content}{self.translated_language}").to_bytes(8, byteorder='little')
@@ -595,7 +595,7 @@ class GeminiTranslator(TranslatorEngine):
 
 class ClaudeTranslator(TranslatorEngine):
     # https://docs.anthropic.com/claude/reference/getting-started-with-the-api
-    claude_models = ['claude-instant-1.2', 'claude-2.1', 'claude-2.0']
+    claude_models = ['claude-instant-1.2', 'claude-2.1', 'claude-2.0', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229']
     model = models.CharField(max_length=50, default="claude-instant-1.2", choices=[(x, x) for x in claude_models])
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     max_tokens = models.IntegerField(default=1000)
