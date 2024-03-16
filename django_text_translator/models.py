@@ -102,9 +102,7 @@ class OpenAITranslator(TranslatorEngine):
     # https://platform.openai.com/docs/api-reference/chat
     openai_models = [
         "gpt-3.5-turbo",
-        "gpt-3.5-turbo-16k",
-        "gpt-4",
-        "gpt-4-32k",
+        "gpt-4-turbo-preview",
     ]
 
     api_key = EncryptedCharField(_("API Key"), max_length=255)
@@ -126,7 +124,7 @@ class OpenAITranslator(TranslatorEngine):
         return OpenAI(
                     api_key=self.api_key,
                     base_url = self.base_url,
-                    timeout=20.0,
+                    timeout=180.0,
                 )
 
     def validate(self) -> bool:
