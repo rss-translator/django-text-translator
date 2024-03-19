@@ -33,25 +33,31 @@ class BaseTranslatorAdmin(admin.ModelAdmin):
 
     is_valid.short_description = 'Valid'
 
+    def masked_api_key(self, obj):
+        api_key = obj.api_key or obj.token
+        if api_key:
+            return f"{api_key[:3]}...{api_key[-3:]}"
+        return ""
+    masked_api_key.short_description = "API Key"
 
 @admin.register(OpenAITranslator)
 class OpenAITranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "frequency_penalty",
               "presence_penalty", "max_tokens"]
-    list_display = ["name", "is_valid", "api_key", "model", "prompt", "max_tokens", "base_url"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url"]
 
 
 @admin.register(AzureAITranslator)
 class AzureAITranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "endpoint", "version", "deloyment_name", "prompt", "temperature", "top_p",
               "frequency_penalty", "presence_penalty", "max_tokens"]
-    list_display = ["name", "is_valid", "api_key", "deloyment_name", "version", "prompt", "max_tokens", "endpoint"]
+    list_display = ["name", "is_valid", "masked_api_key", "deloyment_name", "version", "prompt", "max_tokens", "endpoint"]
 
 
 @admin.register(DeepLTranslator)
 class DeepLTranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "server_url", "proxy", "max_characters"]
-    list_display = ["name", "is_valid", "api_key", "server_url", "proxy", "max_characters"]
+    list_display = ["name", "is_valid", "masked_api_key", "server_url", "proxy", "max_characters"]
 
 
 @admin.register(DeepLXTranslator)
@@ -68,19 +74,19 @@ class DeepLWebTranslatorAdmin(BaseTranslatorAdmin):
 @admin.register(MicrosoftTranslator)
 class MicrosoftTranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "location", "endpoint", "max_characters"]
-    list_display = ["name", "is_valid", "api_key", "location", "endpoint", "max_characters"]
+    list_display = ["name", "is_valid", "masked_api_key", "location", "endpoint", "max_characters"]
 
 
 @admin.register(CaiYunTranslator)
 class CaiYunTranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "token", "url", "max_characters"]
-    list_display = ["name", "is_valid", "token", "url", "max_characters"]
+    list_display = ["name", "is_valid", "masked_api_key", "url", "max_characters"]
 
 
 @admin.register(GeminiTranslator)
 class GeminiTranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "interval"]
-    list_display = ["name", "is_valid", "api_key", "model", "prompt", "max_tokens", "interval"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "interval"]
 
 
 @admin.register(GoogleTranslateWebTranslator)
@@ -90,9 +96,14 @@ class GoogleTranslateWebTranslatorAdmin(BaseTranslatorAdmin):
 
 @admin.register(ClaudeTranslator)
 class ClaudeTranslatorAdmin(BaseTranslatorAdmin):
-    fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "proxy"]
-    list_display = ["name", "is_valid", "api_key", "model", "prompt", "max_tokens", "base_url"]
+    fields = ["name", "masked_api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "proxy"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url"]
 
+@admin.register(MoonshotAITranslator)
+class MoonshotAITranslatorAdmin(BaseTranslatorAdmin):
+    fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "frequency_penalty",
+              "presence_penalty", "max_tokens"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url"]
 
 if settings.DEBUG:
     @admin.register(Translated_Content)
