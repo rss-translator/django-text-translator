@@ -96,7 +96,7 @@ class GoogleTranslateWebTranslatorAdmin(BaseTranslatorAdmin):
 
 @admin.register(ClaudeTranslator)
 class ClaudeTranslatorAdmin(BaseTranslatorAdmin):
-    fields = ["name", "masked_api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "proxy"]
+    fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "proxy"]
     list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url"]
 
 @admin.register(MoonshotAITranslator)
