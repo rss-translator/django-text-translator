@@ -12,6 +12,7 @@ Currently, it supports the following engines:
 - Google Translate(Web)
 - Microsoft Translate API
 - Caiyun API
+- Moonshot AI
 
 
 Installation
