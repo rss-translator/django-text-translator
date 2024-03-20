@@ -46,6 +46,6 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rss-translator/django-text-translator
+Homepage = "https://github.com/rss-translator/django-text-translator"
 Repository = "https://github.com/rss-translator/django-text-translator.git"
 Issues = "https://github.com/rss-translator/django-text-translator/issues"
