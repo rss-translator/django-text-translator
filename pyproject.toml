@@ -1,3 +1,51 @@
 [build-system]
-requires = ['setuptools>=69.1.0']
-build-backend = 'setuptools.build_meta'
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["./"]
+
+[project]
+name = "django-text-translator"
+version = "2024.03.20"
+authors = [
+  { name="Versun", email="django-text-translator@versun.me" },
+]
+description = "A Django application that supports adding multiple third-party engines for text translation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT License"}
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "django>=5.0.2",
+    "cityhash >= 0.4.7",
+    "deepl >= 1.17.0",
+    "PyDeepLX >= 1.0.7",
+    "anthropic >= 0.18.1",
+    "httpx >= 0.27.0",
+    "django-encrypted-model-fields >= 0.6.5",
+    "openai >= 1.12.0",
+    "google-generativeai >= 0.3.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/rss-translator/django-text-translator
+Repository = "https://github.com/rss-translator/django-text-translator.git"
+Issues = "https://github.com/rss-translator/django-text-translator/issues"
