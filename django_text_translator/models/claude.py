@@ -34,7 +34,7 @@ class ClaudeTranslator(TranslatorEngine):
         if self.api_key:
             try:
                 res = self.translate("hi", "Chinese Simplified")
-                return res.get("result") != ""
+                return res.get("text") != ""
             except Exception as e:
                 return False
 

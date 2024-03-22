@@ -29,7 +29,7 @@ class CaiYunTranslator(TranslatorEngine):
 
     def validate(self) -> bool:
         result = self.translate("Hi", "Chinese Simplified")
-        return result.get("result") != ""
+        return result.get("text") != ""
 
     def translate(self, text: str, target_language: str) -> dict:
         logging.info(">>> CaiYun Translate [%s]: %s", target_language, text)
