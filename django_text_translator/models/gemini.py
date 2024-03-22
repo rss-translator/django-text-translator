@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 class GeminiTranslator(TranslatorEngine):
     # https://ai.google.dev/tutorials/python_quickstart
-    gemini_models = ['gemini-pro']
+    gemini_models = ['gemini-pro','gemini-1.5-pro']
 
     # base_url = models.URLField(_("API URL"), default="https://generativelanguage.googleapis.com/v1beta/")
     api_key = EncryptedCharField(_("API Key"), max_length=255)
