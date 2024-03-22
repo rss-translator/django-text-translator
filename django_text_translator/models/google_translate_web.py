@@ -39,7 +39,7 @@ class GoogleTranslateWebTranslator(TranslatorEngine):
 
     def validate(self) -> bool:
         results = self.translate("hi", "Chinese Simplified")
-        return results.get("result") != ""
+        return results.get("text") != ""
 
     def translate(self, text:str, target_language:str) -> dict:
         logging.info(">>> Google Translate Web Translate [%s]:", target_language)

@@ -39,7 +39,7 @@ class DeepLWebTranslator(TranslatorEngine):
     def validate(self) -> bool:
         try:
             resp = self.translate("Hello World", "Chinese Simplified")
-            return resp.get("result") != ""
+            return resp.get("text") != ""
         except Exception as e:
             return False
 
