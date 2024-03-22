@@ -34,7 +34,7 @@ class BaseTranslatorAdmin(admin.ModelAdmin):
     is_valid.short_description = 'Valid'
 
     def masked_api_key(self, obj):
-        api_key = obj.api_key or obj.token
+        api_key = obj.api_key if hasattr(obj, "api_key") else obj.token
         if api_key:
             return f"{api_key[:3]}...{api_key[-3:]}"
         return ""
