@@ -44,6 +44,8 @@ class OpenAITranslator(TranslatorEngine):
                     messages=[{"role": "user", "content": 'Hi'}],
                     max_tokens=10,
                 )
+                fr = res.choices[0].finish_reason # 有些第三方源在key或url错误的情况下，并不会抛出异常代码，而是返回html广告，因此添加该行。
+                logging.info(">>> OpenAI Translate Validate:%s",fr)
                 return True
             except Exception as e:
                 return False
