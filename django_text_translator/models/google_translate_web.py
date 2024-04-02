@@ -58,7 +58,11 @@ class GoogleTranslateWebTranslator(TranslatorEngine):
             }
             resp = httpx.get(self.base_url, params=params, timeout=10, proxy=self.proxy)
             resp.raise_for_status()
-            translated_text = resp.json()[0][0][0]
+            resp_json = resp.json()
+            if resp_json:
+                translated_text = resp_json[0][0][0]
+            else:
+                logging.error("GoogleTranslateWebTranslator->Invalid response: %s", resp.text)
         except Exception as e:
             logging.error("GoogleTranslateWebTranslator->%s: %s", e, text)
         finally:
