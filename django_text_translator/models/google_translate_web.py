@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class GoogleTranslateWebTranslator(TranslatorEngine):
-    base_url = models.URLField(_("URL"), default="https://translate.googleapis.com/translate_a/t")
+    base_url = models.URLField(_("URL"), default="https://translate.googleapis.com/translate_a/single")
     proxy = models.URLField(_("Proxy(optional)"), null=True, blank=True, default=None)
     interval = models.IntegerField(_("Request Interval(s)"), default=3)
     max_characters = models.IntegerField(default=1000)
@@ -58,7 +58,7 @@ class GoogleTranslateWebTranslator(TranslatorEngine):
             }
             resp = httpx.get(self.base_url, params=params, timeout=10, proxy=self.proxy)
             resp.raise_for_status()
-            translated_text = resp.json()[0][0]
+            translated_text = resp.json()[0][0][0]
         except Exception as e:
             logging.error("GoogleTranslateWebTranslator->%s: %s", e, text)
         finally:
