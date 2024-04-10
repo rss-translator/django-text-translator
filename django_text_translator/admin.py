@@ -108,14 +108,14 @@ class MoonshotAITranslatorAdmin(BaseTranslatorAdmin):
 if settings.DEBUG:
     @admin.register(Translated_Content)
     class Translated_ContentAdmin(admin.ModelAdmin):
-        #fields = ["original_content", "translated_content", "translated_language", "tokens", "characters"]
+        fields = ["original_content", "translated_content", "translated_language", "tokens", "characters"]
         list_display = ["original_content", "translated_language", "translated_content", "tokens", "characters"]
     
-        def has_change_permission(self, request, obj=None):
-            return False
+        # def has_change_permission(self, request, obj=None):
+        #     return False
 
-        def has_add_permission(self, request):
-            return False
+        # def has_add_permission(self, request):
+        #     return False
 
 
     @admin.register(TestTranslator)
