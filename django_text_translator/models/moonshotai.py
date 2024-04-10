@@ -23,6 +23,9 @@ class MoonshotAITranslator(TranslatorEngine):
     presence_penalty = models.FloatField(default=0)
     max_tokens = models.IntegerField(default=1000)
 
+    summary = models.BooleanField(default=False)
+    summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
+
     class Meta:
         verbose_name = "Moonshot AI"
         verbose_name_plural = "Moonshot AI"
@@ -47,13 +50,14 @@ class MoonshotAITranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text:str, target_language:str) -> dict:
+    def translate(self, text:str, target_language:str, prompt:str=None) -> dict:
         logging.info(">>> Moonshot AI Translate [%s]:", target_language)
         client = self._init()
         tokens = 0
         translated_text = ''
+        prompt = prompt or self.prompt
         try:
-            prompt = self.prompt.format(target_language=target_language, text=text)
+            prompt = prompt.format(target_language=target_language, text=text)
             res = client.with_options(max_retries=3).chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
@@ -73,3 +77,8 @@ class MoonshotAITranslator(TranslatorEngine):
             logging.error("OpenAITranslator->%s: %s", e, text)
 
         return {'text': translated_text, "tokens": tokens}
+
+    def summarize(self, text:str, target_language:str) -> dict:
+        logging.info(">>> Moonshot AI Summarize [%s]:", target_language)
+        return self.translate(text, target_language, self.summary_prompt)
+        

@@ -19,6 +19,9 @@ class ClaudeTranslator(TranslatorEngine):
     top_p = models.FloatField(null=True, blank=True, default=0.7)
     top_k = models.IntegerField(default=1)
 
+    summary = models.BooleanField(default=False)
+    summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
+
     class Meta:
         verbose_name = "Anthropic Claude"
         verbose_name_plural = "Anthropic Claude"
@@ -38,13 +41,14 @@ class ClaudeTranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text:str, target_language:str) -> dict:
+    def translate(self, text:str, target_language:str, prompt:str=None) -> dict:
         logging.info(">>> Claude Translate [%s]:", target_language)
         client = self._init()
         tokens = client.count_tokens(text)
         translated_text = ''
+        prompt = prompt or self.prompt
         try:
-            prompt = self.prompt.format(target_language=target_language, text=text)
+            prompt = prompt.format(target_language=target_language, text=text)
             res = client.messages.create(
                 model=self.model,
                 max_tokens=self.max_tokens,
@@ -61,3 +65,7 @@ class ClaudeTranslator(TranslatorEngine):
             logging.error("ClaudeTranslator->%s: %s", e, text)
         finally:
             return {'text': translated_text, "tokens": tokens}
+        
+    def summarize(self, text:str, target_language:str) -> dict:
+        logging.info(">>> Claude Summarize [%s]:", target_language)
+        return self.translate(text, target_language, self.summary_prompt)

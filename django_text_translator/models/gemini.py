@@ -21,6 +21,10 @@ class GeminiTranslator(TranslatorEngine):
     max_tokens = models.IntegerField(default=1000)
     interval = models.IntegerField(_("Request Interval(s)"), default=3)
 
+    summary = models.BooleanField(default=False)
+    summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
+
+
     class Meta:
         verbose_name = "Google Gemini"
         verbose_name_plural = "Google Gemini"
@@ -38,13 +42,14 @@ class GeminiTranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text:str, target_language:str) -> dict:
+    def translate(self, text:str, target_language:str, prompt:str=None) -> dict:
         logging.info(">>> Gemini Translate [%s]:", target_language)
         model = self._init()
         tokens = 0
         translated_text = ''
+        prompt = prompt or self.prompt
         try:
-            prompt = self.prompt.format(target_language=target_language, text=text)
+            prompt = prompt.format(target_language=target_language, text=text)
             generation_config = genai.types.GenerationConfig(
                 candidate_count=1,
                 temperature=self.temperature,
@@ -66,4 +71,8 @@ class GeminiTranslator(TranslatorEngine):
             sleep(self.interval)
 
         return {'text': translated_text, "tokens": tokens}
+    
+    def summarize(self, text:str, target_language:str) -> dict:
+        logging.info(">>> Gemini Summarize [%s]:", target_language)
+        return self.translate(text, target_language, self.summary_prompt)
 
