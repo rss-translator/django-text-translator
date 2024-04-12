@@ -9,8 +9,8 @@ from django.utils.translation import gettext_lazy as _
 class OpenAITranslator(TranslatorEngine):
     # https://platform.openai.com/docs/api-reference/chat
     openai_models = [
-        "gpt-3.5-turbo",
-        "gpt-4-turbo-preview",
+        "gpt-3.5-turbo-0125",
+        "gpt-4-turbo-2024-04-09",
     ]
 
     api_key = EncryptedCharField(_("API Key"), max_length=255)
@@ -80,7 +80,7 @@ class OpenAITranslator(TranslatorEngine):
             logging.error("OpenAITranslator->%s: %s", e, text)
 
         return {'text': translated_text, "tokens": tokens}
-    
+
     def summarize(self, text:str, target_language:str) -> dict:
         logging.info(">>> OpenAI Summarize [%s]:", target_language)
         return self.translate(text, target_language, self.summary_prompt)
