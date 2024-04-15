@@ -10,7 +10,7 @@ class OpenAITranslator(TranslatorEngine):
     # https://platform.openai.com/docs/api-reference/chat
     openai_models = [
         "gpt-3.5-turbo",
-        "gpt-4-turbo-preview",
+        "gpt-4-turbo",
     ]
 
     api_key = EncryptedCharField(_("API Key"), max_length=255)
