@@ -7,14 +7,9 @@ from django.utils.translation import gettext_lazy as _
 
 class MoonshotAITranslator(TranslatorEngine):
     # https://platform.moonshot.cn/docs/api-reference
-    moonshotai_models = [
-        "moonshot-v1-8k",
-        "moonshot-v1-32k",
-        "moonshot-v1-128k",
-    ]
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     base_url = models.URLField(_("API URL"), default="https://api.moonshot.cn/v1")
-    model = models.CharField(max_length=100, default="moonshot-v1-8k", choices=[(x, x) for x in moonshotai_models])
+    model = models.CharField(max_length=100, default="moonshot-v1-8k",help_text="e.g. moonshot-v1-8k, moonshot-v1-32k, moonshot-v1-128k")
     prompt = models.TextField(
         default="Translate only the text from the following into {target_language},only returns translations.\n{text}")
     temperature = models.FloatField(default=0.5)

@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 class ClaudeTranslator(TranslatorEngine):
     # https://docs.anthropic.com/claude/reference/getting-started-with-the-api
-    claude_models = ['claude-3-haiku-20240307', 'claude-3-sonnet-20240229', 'claude-3-opus-20240229']
-    model = models.CharField(max_length=50, default="claude-instant-1.2", choices=[(x, x) for x in claude_models])
+
+    model = models.CharField(max_length=50, default="claude-3-haiku-20240307", help_text="e.g. claude-3-haiku-20240307, claude-3-sonnet-20240229, claude-3-opus-20240229")
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     max_tokens = models.IntegerField(default=1000)
     base_url = models.URLField(_("API URL"), default="https://api.anthropic.com")

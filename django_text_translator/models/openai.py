@@ -8,14 +8,10 @@ from django.utils.translation import gettext_lazy as _
 
 class OpenAITranslator(TranslatorEngine):
     # https://platform.openai.com/docs/api-reference/chat
-    openai_models = [
-        "gpt-3.5-turbo",
-        "gpt-4-turbo",
-    ]
 
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     base_url = models.URLField(_("API URL"), default="https://api.openai.com/v1")
-    model = models.CharField(max_length=100, default="gpt-3.5-turbo", choices=[(x, x) for x in openai_models])
+    model = models.CharField(max_length=100, default="gpt-3.5-turbo", help_text="e.g. gpt-3.5-turbo, gpt-4-turbo")
     prompt = models.TextField(
         default="Translate only the text from the following into {target_language},only returns translations.\n{text}")
     temperature = models.FloatField(default=0.5)
