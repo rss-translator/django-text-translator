@@ -7,7 +7,7 @@ packages = ["./"]
 
 [project]
 name = "django-text-translator"
-version = "2024.4.10"
+version = "2024.4.16"
 authors = [
   { name="Versun", email="django-text-translator@versun.me" },
 ]
