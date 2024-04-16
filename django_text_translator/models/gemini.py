@@ -21,7 +21,6 @@ class GeminiTranslator(TranslatorEngine):
     max_tokens = models.IntegerField(default=1000)
     interval = models.IntegerField(_("Request Interval(s)"), default=3)
 
-    summary = models.BooleanField(default=False)
     summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
 
 

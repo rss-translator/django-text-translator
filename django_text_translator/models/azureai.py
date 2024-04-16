@@ -19,7 +19,6 @@ class AzureAITranslator(TranslatorEngine):
     presence_penalty = models.FloatField(default=0)
     max_tokens = models.IntegerField(default=1000)
     
-    summary = models.BooleanField(default=False)
     summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
 
     class Meta:

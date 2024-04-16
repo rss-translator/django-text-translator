@@ -43,15 +43,15 @@ class BaseTranslatorAdmin(admin.ModelAdmin):
 @admin.register(OpenAITranslator)
 class OpenAITranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "frequency_penalty",
-              "presence_penalty", "max_tokens", "summary", "summary_prompt"]
-    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url", "summary", "summary_prompt"]
+              "presence_penalty", "max_tokens",  "summary_prompt"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url",  "summary_prompt"]
 
 
 @admin.register(AzureAITranslator)
 class AzureAITranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "endpoint", "version", "deloyment_name", "prompt", "temperature", "top_p",
-              "frequency_penalty", "presence_penalty", "max_tokens", "summary", "summary_prompt"]
-    list_display = ["name", "is_valid", "masked_api_key", "deloyment_name", "version", "prompt", "max_tokens", "endpoint", "summary", "summary_prompt"]
+              "frequency_penalty", "presence_penalty", "max_tokens",  "summary_prompt"]
+    list_display = ["name", "is_valid", "masked_api_key", "deloyment_name", "version", "prompt", "max_tokens", "endpoint",  "summary_prompt"]
 
 
 @admin.register(DeepLTranslator)
@@ -85,8 +85,8 @@ class CaiYunTranslatorAdmin(BaseTranslatorAdmin):
 
 @admin.register(GeminiTranslator)
 class GeminiTranslatorAdmin(BaseTranslatorAdmin):
-    fields = ["name", "api_key", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "summary", "summary_prompt", "interval"]
-    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "summary", "summary_prompt", "interval"]
+    fields = ["name", "api_key", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens",  "summary_prompt", "interval"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens",  "summary_prompt", "interval"]
 
 
 @admin.register(GoogleTranslateWebTranslator)
@@ -96,14 +96,14 @@ class GoogleTranslateWebTranslatorAdmin(BaseTranslatorAdmin):
 
 @admin.register(ClaudeTranslator)
 class ClaudeTranslatorAdmin(BaseTranslatorAdmin):
-    fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens", "summary", "summary_prompt", "proxy"]
-    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url", "summary", "summary_prompt"]
+    fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "top_k", "max_tokens",  "summary_prompt", "proxy"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url",  "summary_prompt"]
 
 @admin.register(MoonshotAITranslator)
 class MoonshotAITranslatorAdmin(BaseTranslatorAdmin):
     fields = ["name", "api_key", "base_url", "model", "prompt", "temperature", "top_p", "frequency_penalty",
-              "presence_penalty", "max_tokens", "summary", "summary_prompt"]
-    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url", "summary", "summary_prompt"]
+              "presence_penalty", "max_tokens",  "summary_prompt"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "prompt", "max_tokens", "base_url",  "summary_prompt"]
 
 if settings.DEBUG:
     @admin.register(Translated_Content)

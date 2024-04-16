@@ -19,7 +19,6 @@ class ClaudeTranslator(TranslatorEngine):
     top_p = models.FloatField(null=True, blank=True, default=0.7)
     top_k = models.IntegerField(default=1)
 
-    summary = models.BooleanField(default=False)
     summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
 
     class Meta:
