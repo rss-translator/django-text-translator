@@ -12,14 +12,13 @@ class ClaudeTranslator(TranslatorEngine):
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     max_tokens = models.IntegerField(default=1000)
     base_url = models.URLField(_("API URL"), default="https://api.anthropic.com")
-    prompt = models.TextField(
-        default="Translate only the text from the following into {target_language},only returns translations.\n{text}")
+    translate_prompt = models.TextField(default="Translate only the text into {target_language},only returns translations.")
     proxy = models.URLField(_("Proxy(optional)"), null=True, blank=True, default=None)
     temperature = models.FloatField(default=0.7)
     top_p = models.FloatField(null=True, blank=True, default=0.7)
     top_k = models.IntegerField(default=1)
 
-    summary_prompt = models.TextField(default="Summarize the following text in {target_language}:\n{text}")
+    summary_prompt = models.TextField(default="Summarize the following text in {target_language}.")
 
     class Meta:
         verbose_name = "Anthropic Claude"
@@ -40,26 +39,28 @@ class ClaudeTranslator(TranslatorEngine):
             except Exception as e:
                 return False
 
-    def translate(self, text:str, target_language:str, prompt:str=None) -> dict:
+    def translate(self, text:str, target_language:str, system_prompt:str=None, user_prompt:str=None) -> dict:
         logging.info(">>> Claude Translate [%s]:", target_language)
         client = self._init()
         tokens = client.count_tokens(text)
         translated_text = ''
-        prompt = prompt or self.prompt
+        system_prompt = system_prompt or self.translate_prompt
         try:
-            prompt = prompt.format(target_language=target_language, text=text)
             res = client.messages.create(
                 model=self.model,
                 max_tokens=self.max_tokens,
-                messages=[{"role": "user", "content": prompt}],
+                system=system_prompt.format(target_language=target_language),
+                messages=[{"role": "user", "content": f"{user_prompt}\n{text}"}],
                 temperature=self.temperature,
                 top_p=self.top_p,
                 top_k=self.top_k,
             )
             result = res.content
-            if result[0].type == "text":
+            if result and result[0].type == "text":
                 translated_text = result[0].text
-                tokens += res.usage.output_tokens
+            else:
+                logging.warning("ClaudeTranslator-> %s", res.stop_reason)
+            tokens = res.usage.output_tokens + res.usage.input_tokens
         except Exception as e:
             logging.error("ClaudeTranslator->%s: %s", e, text)
         finally:
@@ -67,4 +68,4 @@ class ClaudeTranslator(TranslatorEngine):
         
     def summarize(self, text:str, target_language:str) -> dict:
         logging.info(">>> Claude Summarize [%s]:", target_language)
-        return self.translate(text, target_language, self.summary_prompt)
+        return self.translate(text, target_language, system_prompt=self.summary_prompt)
