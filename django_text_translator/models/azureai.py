@@ -8,7 +8,7 @@ class AzureAITranslator(OpenAIInterface):
     # https://learn.microsoft.com/azure/ai-services/openai/
     api_key = models.URLField(_("Endpoint"), default="https://example.openai.azure.com/")
     version = models.CharField(max_length=50, default="2023-12-01-preview")
-    model = models.CharField(_("Deloyment Name"), max_length=100)
+    model = models.CharField(_("Deloyment Name"), max_length=100, default="Your Deployment Name")
 
     class Meta:
         verbose_name = "Azure OpenAI"
