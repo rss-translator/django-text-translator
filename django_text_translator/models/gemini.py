@@ -11,7 +11,7 @@ class GeminiTranslator(TranslatorEngine):
 
     # base_url = models.URLField(_("API URL"), default="https://generativelanguage.googleapis.com/v1beta/")
     api_key = EncryptedCharField(_("API Key"), max_length=255)
-    model = models.CharField(max_length=100, default="gemini-1.5-pro-latest", help_text="only support gemini-1.5-pro-latest")
+    model = models.CharField(max_length=100, default="gemini-pro", help_text="e.g. gemini-pro, gemini-1.5-pro-latest")
     translate_prompt = models.TextField(
         default="Translate only the text from the following into {target_language},only returns translations.")
     temperature = models.FloatField(default=0.5)
@@ -30,7 +30,7 @@ class GeminiTranslator(TranslatorEngine):
     def _init(self, system_prompt:str=None):
         genai.configure(api_key=self.api_key)
         return genai.GenerativeModel(model_name=self.model, 
-                                     system_instruction=system_prompt or self.translate_prompt
+                                     #system_instruction=system_prompt or self.translate_prompt
                                      )
 
     def validate(self) -> bool:
@@ -49,9 +49,9 @@ class GeminiTranslator(TranslatorEngine):
         tokens = 0
         translated_text = ''
         system_prompt = system_prompt or self.translate_prompt
-
+        prompt = f"{system_prompt.format(target_language=target_language)}\n{user_prompt}\n{text}"
         try:
-            model = self._init(system_prompt.format(target_language=target_language))
+            model = self._init()
             generation_config = genai.types.GenerationConfig(
                 candidate_count=1,
                 temperature=self.temperature,
@@ -59,14 +59,14 @@ class GeminiTranslator(TranslatorEngine):
                 top_k=self.top_k,
                 max_output_tokens=self.max_tokens
             )
-            res = model.generate_content(f"{user_prompt}\n{text}", generation_config=generation_config)
-            finish_reason = res.candidates[0].finish_reason.name if res.candidates else None
-            if finish_reason == "STOP":
+            res = model.generate_content(prompt, generation_config=generation_config)
+            finish_reason = res.candidates[0].finish_reason if res.candidates else None
+            if finish_reason == 1:
                 translated_text = res.text
             else:
                 translated_text = ''
-                logging.info("GeminiTranslator finish_reason->%s: %s", finish_reason, text)
-            tokens = model.count_tokens(f"{user_prompt}\n{text}").total_tokens
+                logging.info("GeminiTranslator finish_reason->%s: %s", finish_reason.name, text)
+            tokens = model.count_tokens(prompt).total_tokens
         except Exception as e:
             logging.error("GeminiTranslator->%s: %s", e, text)
         finally:
