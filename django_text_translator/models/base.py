@@ -113,6 +113,7 @@ class OpenAIInterface(TranslatorEngine):
                 logging.info(">>> Translator Validate:%s",fr)
                 return True
             except Exception as e:
+                logging.error("OpenAIInterface validate ->%s", e)
                 return False
 
     def translate(self, text:str, target_language:str, system_prompt:str=None, user_prompt:str=None) -> dict:

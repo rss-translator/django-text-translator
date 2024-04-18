@@ -41,6 +41,7 @@ class DeepLWebTranslator(TranslatorEngine):
             resp = self.translate("Hello World", "Chinese Simplified")
             return resp.get("text") != ""
         except Exception as e:
+            logging.error("DeepLWebTranslator validate ->%s", e)
             return False
 
     def translate(self, text:str, target_language:str) -> dict:

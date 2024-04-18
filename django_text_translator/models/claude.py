@@ -33,11 +33,8 @@ class ClaudeTranslator(TranslatorEngine):
 
     def validate(self) -> bool:
         if self.api_key:
-            try:
-                res = self.translate("hi", "Chinese Simplified")
-                return res.get("text") != ""
-            except Exception as e:
-                return False
+            res = self.translate("hi", "Chinese Simplified")
+            return res.get("text") != ""
 
     def translate(self, text:str, target_language:str, system_prompt:str=None, user_prompt:str=None) -> dict:
         logging.info(">>> Claude Translate [%s]:", target_language)

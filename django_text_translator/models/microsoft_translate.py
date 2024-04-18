@@ -4,6 +4,7 @@ import logging
 from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 class MicrosoftTranslator(TranslatorEngine):
     # https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support

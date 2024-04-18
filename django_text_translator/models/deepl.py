@@ -46,6 +46,7 @@ class DeepLTranslator(TranslatorEngine):
             usage = translator.get_usage()
             return usage.character.valid
         except Exception as e:
+            logging.error("DeepLTranslator validate ->%s", e)
             return False
 
     def translate(self, text:str, target_language:str) -> dict:
