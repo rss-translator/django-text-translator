@@ -8,6 +8,7 @@ from encrypted_model_fields.fields import EncryptedCharField
 class TranslatorEngine(models.Model):
     name = models.CharField(_("Name"), max_length=100, unique=True)
     valid = models.BooleanField(_("Valid"), null=True)
+    is_ai = models.BooleanField(default=False, editable=False)
 
     def translate(self, text: str, target_language: str) -> dict:
         raise NotImplementedError(
@@ -77,6 +78,7 @@ class Translated_Content(models.Model):
 
 
 class OpenAIInterface(TranslatorEngine):
+    is_ai = models.BooleanField(default=True,editable=False)
     api_key = EncryptedCharField(_("API Key"), max_length=255)
     base_url = models.URLField(_("API URL"), default="https://api.openai.com/v1")
     model = models.CharField(max_length=100, default="gpt-3.5-turbo", help_text="e.g. gpt-3.5-turbo, gpt-4-turbo")
