@@ -57,8 +57,11 @@ class DeepLXTranslator(TranslatorEngine):
                 "source_lang": "auto",
                 "target_lang": target_code,
             }
+            headers = {
+              'Content-Type': 'application/json'
+            }
             post_data = json.dumps(data)
-            resp = httpx.post(url=self.deeplx_api, data=post_data, timeout=10)
+            resp = httpx.post(url=self.deeplx_api, headers=headers, data=post_data, timeout=10)
             if resp.status_code == 429:
                 raise ("DeepLXTranslator-> IP has been blocked by DeepL temporarily")
             translated_text = resp.json()["data"]
