@@ -141,11 +141,12 @@ class OpenAIInterface(TranslatorEngine):
                 presence_penalty=self.presence_penalty,
                 max_tokens=self.max_tokens,
             )
-            if res.choices[0].finish_reason == "stop":
+            if res.choices[0].finish_reason == "stop" or res.choices[0].message.content:
+                logging.info("OpenAITranslator->%s: %s", res.choices[0].finish_reason, text)
                 translated_text = res.choices[0].message.content
-            else:
-                translated_text = ''
-                logging.warning("Translator->%s: %s", res.choices[0].finish_reason, text)
+            # else:
+            #     translated_text = ''
+            #     logging.warning("Translator->%s: %s", res.choices[0].finish_reason, text)
             tokens = res.usage.total_tokens
         except Exception as e:
             logging.error("Translator->%s: %s", e, text)
