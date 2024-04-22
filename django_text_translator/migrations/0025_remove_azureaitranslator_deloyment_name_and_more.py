@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='testtranslator',
             name='is_ai',
-            field=models.BooleanField(default=False, editable=False),
+            field=models.BooleanField(default=True, editable=False),
         ),
         migrations.AlterField(
             model_name='azureaitranslator',
