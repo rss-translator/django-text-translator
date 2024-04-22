@@ -43,11 +43,15 @@ class ClaudeTranslator(TranslatorEngine):
         translated_text = ''
         system_prompt = system_prompt or self.translate_prompt
         try:
+            system_prompt = system_prompt.format(target_language=target_language)
+            if user_prompt is not None:
+                system_prompt += f"\n\n{user_prompt}"
+                
             res = client.messages.create(
                 model=self.model,
                 max_tokens=self.max_tokens,
-                system=system_prompt.format(target_language=target_language),
-                messages=[{"role": "user", "content": f"{user_prompt}\n{text}"}],
+                system=system_prompt,
+                messages=[{"role": "user", "content": text}],
                 temperature=self.temperature,
                 top_p=self.top_p,
                 top_k=self.top_k,
