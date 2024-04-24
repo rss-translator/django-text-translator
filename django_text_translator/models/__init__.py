@@ -12,5 +12,7 @@ from .moonshotai import MoonshotAITranslator
 from .openai import OpenAITranslator
 from .togetherai import TogetherAITranslator
 from .openrouterai import OpenRouterAITranslator
+from .groq import GroqTranslator
+
 
 from .dev import TestTranslator
