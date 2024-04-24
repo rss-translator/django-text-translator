@@ -105,6 +105,12 @@ class MoonshotAITranslatorAdmin(BaseTranslatorAdmin):
               "presence_penalty", "max_tokens"]
     list_display = ["name", "is_valid", "masked_api_key", "model", "translate_prompt", "summary_prompt", "max_tokens", "base_url"]
 
+@admin.register(TogetherAITranslator)
+class TogetherAITranslatorAdmin(BaseTranslatorAdmin):
+    fields = ["name", "api_key", "base_url", "model", "translate_prompt", "summary_prompt", "temperature", "top_p", "frequency_penalty",
+              "presence_penalty", "max_tokens"]
+    list_display = ["name", "is_valid", "masked_api_key", "model", "translate_prompt", "summary_prompt", "max_tokens", "base_url"]
+
 if settings.DEBUG:
     @admin.register(Translated_Content)
     class Translated_ContentAdmin(admin.ModelAdmin):

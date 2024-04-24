@@ -10,4 +10,5 @@ from .google_translate_web import GoogleTranslateWebTranslator
 from .microsoft_translate import MicrosoftTranslator
 from .moonshotai import MoonshotAITranslator
 from .openai import OpenAITranslator
+from .togetherai import TogetherAITranslator
 from .dev import TestTranslator
