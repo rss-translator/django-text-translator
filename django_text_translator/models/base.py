@@ -125,14 +125,13 @@ class OpenAIInterface(TranslatorEngine):
         translated_text = ''
         system_prompt = system_prompt or self.translate_prompt
         try:
-            system_prompt = system_prompt.format(target_language=target_language)
-            if user_prompt is not None:
+            if user_prompt:
                 system_prompt += f"\n\n{user_prompt}"
 
             res = client.with_options(max_retries=3).chat.completions.create(
                 model=self.model,
                 messages = [
-                    {"role": "system", "content": system_prompt},
+                    {"role": "system", "content": f'{system_prompt}'},
                     {"role": "user", "content": text}
                 ],
                 temperature=self.temperature,
