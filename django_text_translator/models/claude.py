@@ -43,7 +43,7 @@ class ClaudeTranslator(TranslatorEngine):
         translated_text = ''
         system_prompt = system_prompt or self.translate_prompt
         try:
-            system_prompt = system_prompt.format(target_language=target_language)
+            system_prompt = system_prompt.replace('{target_language}', target_language)
             if user_prompt is not None:
                 system_prompt += f"\n\n{user_prompt}"
                 

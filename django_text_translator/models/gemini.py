@@ -49,7 +49,7 @@ class GeminiTranslator(TranslatorEngine):
         tokens = 0
         translated_text = ''
         system_prompt = system_prompt or self.translate_prompt
-        prompt = f"{system_prompt.format(target_language=target_language)}\n{user_prompt}\n{text}"
+        prompt = f"{system_prompt.replace('{target_language}', target_language)}\n{user_prompt}\n{text}"
         try:
             model = self._init()
             generation_config = genai.types.GenerationConfig(
