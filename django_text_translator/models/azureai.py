@@ -6,8 +6,8 @@ from .base import OpenAIInterface
 
 class AzureAITranslator(OpenAIInterface):
     # https://learn.microsoft.com/azure/ai-services/openai/
-    api_key = models.URLField(_("Endpoint"), default="https://example.openai.azure.com/")
-    version = models.CharField(max_length=50, default="2023-12-01-preview")
+    base_url = models.URLField(_("Endpoint"), default="https://example.openai.azure.com/")
+    version = models.CharField(max_length=50, default="2024-02-15-preview")
     model = models.CharField(_("Deloyment Name"), max_length=100, default="Your Deployment Name")
 
     class Meta:
@@ -18,6 +18,6 @@ class AzureAITranslator(OpenAIInterface):
         return AzureOpenAI(
                     api_key=self.api_key,
                     api_version=self.version,
-                    azure_endpoint=self.model,
+                    azure_endpoint=self.base_url,
                     timeout=120.0,
                 )
