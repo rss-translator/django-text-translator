@@ -1,3 +1,8 @@
+---
+> # ⛔️This package has been merged into [RSS Translator](https://github.com/rss-translator/RSS-Translator/tree/main/translator)
+
+---
+
 ## django-text-translator
 
 A Django application that supports adding multiple third-party engines for text translation.
